@@ -1,0 +1,7 @@
+services:
+  vm:
+    build:
+      context: ./vm
+      dockerfile: Dockerfile
+    stdin_open: true
+    tty: true
