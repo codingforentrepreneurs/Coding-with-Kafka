@@ -25,6 +25,8 @@ services:
     ports:
       - "19092:19092" # 127.0.0.1:19092
       - "29092:29092"
+    depends_on:
+      - zookeeper
   vm:
     build:
       context: ./vm
