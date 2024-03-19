@@ -21,10 +21,11 @@ msg = data_json_str.encode('utf-8')
 
 # producer.flush()
 
-for _ in range(100):
+for _ in range(5):
     data = {'hello': 'world'}
     data_json = json.dumps(data)
     data_ready = data_json.encode('utf-8')
+    # data_ready = "hello world".encode('utf-8')
     producer.send(KAFKA_TOPIC, data_ready)
 
 producer.flush()
