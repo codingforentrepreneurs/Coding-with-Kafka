@@ -66,13 +66,13 @@ __Create a topic__
 __Interactive shell for creating messages for an existing topic__
 
 ```bash
-kafka-console-producer --bootstrap-server localhost:9092 --topic hello-world
+/bin/kafka-console-producer --bootstrap-server localhost:9092 --topic hello-world
 ```
 
 __Listen for a topic's messages__
 - Listen to messages for topic
 ```bash
-kafka-console-consumer --bootstrap-server localhost:9092 --topic hello-world --from-beginning
+/bin/kafka-console-consumer --bootstrap-server localhost:9092 --topic hello-world --from-beginning
 ```
 
 
