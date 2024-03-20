@@ -1,0 +1,11 @@
+{
+  "dependencies": {
+    "kafkajs": "^2.2.4"
+  },
+  "scripts": {
+    "consume": "tsx src/js_consume.js"
+  },
+  "devDependencies": {
+    "tsx": "^4.7.1"
+  }
+}
