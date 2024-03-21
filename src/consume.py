@@ -9,10 +9,11 @@ bootstrap_servers=[KAFKA_BROKER_URL, KAFKA_BROKER_URL2, KAFKA_BROKER_URL3]
 KAFKA_TOPIC="hello-world"
 
 consumer = KafkaConsumer(
+    KAFKA_TOPIC,
     bootstrap_servers=bootstrap_servers,
     auto_offset_reset='smallest' # from_beginning: true
 )
-consumer.assign([TopicPartition(KAFKA_TOPIC, 1)])
+# consumer.assign([TopicPartition(KAFKA_TOPIC, 1)])
 
 for msg in consumer:
     raw_value = msg.value
