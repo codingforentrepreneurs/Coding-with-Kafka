@@ -60,8 +60,35 @@ Key ones:
 
 __Create a topic__
 ```bash
-/bin/kafka-topics --bootstrap-server localhost:9092 --create --topic hello-world --partitions 1 --replication-factor 1
+/bin/kafka-topics --bootstrap-server localhost:9092 --create --topic hello-world --partitions 3 --replication-factor 2
 ```
+
+```python
+# Understanding Partitions and Replication Factor
+a = 'some_message'
+b = 'some_other message'
+c = 'yet another one'
+d = 'new one'
+e = 'newer one'
+f = 'newest one'
+
+my_topic = [a, b, c] 
+
+my_topic = [
+    [a, e], # kafka-1
+    [b, d], # kafka-2
+    [c, f] # kafka-3
+] 
+
+my_topic_copy = [
+    [a, e], # kafka-2
+    [b, d], # kafka-1
+    [c, f] # kafka-3
+] 
+
+my_topic = [a, b,c,f,e,d] 
+```
+
 
 __Interactive shell for creating messages for an existing topic__
 
