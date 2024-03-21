@@ -60,7 +60,7 @@ Key ones:
 
 __Create a topic__
 ```bash
-/bin/kafka-topics --bootstrap-server localhost:9092 --create --topic hello-world --partitions 3 --replication-factor 2
+/bin/kafka-topics --bootstrap-server localhost:9092 --create --topic hello-world --partitions 1 --replication-factor 1
 ```
 
 ```python
