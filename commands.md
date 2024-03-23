@@ -121,7 +121,7 @@ __Start the default config__
 
 __Create a topic__
 ```bash
-/opt/kafka/bin/kafka-topics.sh --bootstrap-server localhost:9092 --create --topic hello-world --partitions 4 --replication-factor 3
+/opt/kafka/bin/kafka-topics.sh --bootstrap-server localhost:9092 --create --topic hello-world --partitions 1 --replication-factor 1
 ```
 
 __Interactive shell for creating messages for an existing topic__
@@ -139,7 +139,7 @@ __Listen for a topic's messages__
 
 __Delete a topic__
 ```bash
-/opt/kafka/bin/kafka-topics.sh --bootstrap-server=localhost:9092 --delete --if-exists --topic my-topic
+/opt/kafka/bin/kafka-topics.sh --bootstrap-server=localhost:9092 --delete --if-exists --topic hello-world
 ```
 
 __List topics__
