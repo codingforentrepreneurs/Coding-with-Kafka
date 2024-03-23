@@ -1,0 +1,10 @@
+[zookeeper_servers]
+%{ for index, instance in zookeeper_instances ~}
+${instance.hostname} ansible_host=${instance.ip_address} private_ip=${instance.private_ip}
+%{ endfor ~}
+
+
+[kafka_servers]
+%{ for index, instance in kafka_instances ~}
+${instance.hostname} ansible_host=${instance.ip_address} private_ip=${instance.private_ip}
+%{ endfor ~}

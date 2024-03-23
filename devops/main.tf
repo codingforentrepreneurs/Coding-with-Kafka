@@ -82,3 +82,12 @@ resource "local_file" "zookeeper_kafka_hostsfile" {
   })
   filename = "${local.project_root_dir}/host-config.txt"
 }
+
+
+resource "local_file" "ansible_inventory" {
+  content = templatefile("${local.templates_dir}/ansible-inventory.tftpl", {
+    kafka_instances=local.kafka_instances,
+    zookeeper_instances=local.zookeeper_instances
+  })
+  filename = "${local.project_root_dir}/inventory.ini"
+}
