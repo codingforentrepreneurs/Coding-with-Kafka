@@ -107,3 +107,42 @@ __Create a topic and related messages__
 ```bash
 /bin/kafka-topics --bootstrap-server=localhost:9092 --delete --if-exists --topic my-topic
 ```
+
+
+## Kakfa on Virtual Machine
+
+Assuming that kafka is avialable on `/opt/kafka`
+
+
+__Start the default config__
+```bash
+/opt/kafka/bin/kafka-server-start.sh /opt/kafka/config/server.properties
+```
+
+__Create a topic__
+```bash
+/opt/kafka/bin/kafka-topics.sh --bootstrap-server localhost:9092 --create --topic hello-world --partitions 4 --replication-factor 3
+```
+
+__Interactive shell for creating messages for an existing topic__
+
+```bash
+/opt/kafka/bin/kafka-console-producer.sh --bootstrap-server localhost:9092 --topic hello-world
+```
+
+__Listen for a topic's messages__
+- Listen to messages for topic
+```bash
+/opt/kafka/bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic hello-world --from-beginning
+```
+
+
+__Delete a topic__
+```bash
+/opt/kafka/bin/kafka-topics.sh --bootstrap-server=localhost:9092 --delete --if-exists --topic my-topic
+```
+
+__List topics__
+```bash
+/opt/kafka/bin/kafka-topics.sh --bootstrap-server=localhost:9092 --list
+```
