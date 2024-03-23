@@ -1,5 +1,6 @@
 .DS_STORE
 host-config.txt
+inventory.ini
 
 # Python gitignore
 
