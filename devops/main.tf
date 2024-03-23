@@ -54,3 +54,31 @@ resource "linode_instance" "kafka-instance" {
         ]
     }
 }
+
+
+locals {
+  project_root_dir = "${dirname(abspath(path.root))}"
+  root_dir = "${abspath(path.root)}"
+  templates_dir = "${local.root_dir}/templates"
+  kafka_instances = [ for host in linode_instance.kafka-instance.* : {
+      ip_address: host.ip_address
+      label: host.label
+      hostname: host.label
+      private_ip: host.private_ip_address
+  }]
+  zookeeper_instances = [ for host in linode_instance.zookeeper-instance.* : {
+      ip_address: host.ip_address
+      label: host.label
+      hostname: host.label
+      private_ip: host.private_ip_address
+  }]
+}
+
+
+resource "local_file" "zookeeper_kafka_hostsfile" {
+  content = templatefile("${local.templates_dir}/hostsfile.tftpl", {
+    kafka_instances=local.kafka_instances,
+    zookeeper_instances=local.zookeeper_instances
+  })
+  filename = "${local.project_root_dir}/host-config.txt"
+}
