@@ -27,7 +27,7 @@ After you declare `main.tf`, run the following next to `main.tf`
 ```
 terraform init
 ```
-> Tip, if you are one directory up and the Terraform module is in `devops/main.tf`, you can run `terraform init -chdir=devops`
+> Tip, if you are one directory up and the Terraform module is in `devops/main.tf`, you can run `terraform -chdir=devops init`
 
 You will run `terraform init` anytime you add a new provider.
 
@@ -37,7 +37,7 @@ Anytime you want to review changes you have made with terraform, run:
 ```bash
 terraform plan
 ```
-> Once again, if you are one directory up and the Terraform module is in `devops/main.tf`, you can run `terraform plan -chdir=devops`
+> Once again, if you are one directory up and the Terraform module is in `devops/main.tf`, you can run `terraform -chdir=devops plan`
 
 
 ### `terraform apply`
