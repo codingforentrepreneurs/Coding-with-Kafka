@@ -109,6 +109,34 @@ __Create a topic and related messages__
 ```
 
 
+## Zookeeper on Virtual Machine
+
+Assuming that kafka is avialable on `/opt/kafka`, you can use the following:
+
+
+__Start with the default config__
+```bash
+/opt/kafka/bin/zookeeper-server-start.sh /opt/kafka/config/zookeeper.properties
+```
+
+__Start with the custom config__
+
+```bash
+/opt/kafka/bin/zookeeper-server-start.sh /data/my-config/zookeeper.properties
+```
+`/data/my-config/zookeeper.properties` is essentially the same as the default config with some minor changes (including the Zookeeper servers in the quorom).
+
+__Stop with the default config__
+```bash
+/opt/kafka/bin/zookeeper-server-stop.sh
+```
+
+__Zookeeper Shell when Zookeeper is running/available__
+```bash
+/opt/kafka/bin/zookeeper-shell.sh localhost:2181
+```
+
+
 ## Kakfa on Virtual Machine
 
 Assuming that kafka is avialable on `/opt/kafka`
@@ -121,28 +149,28 @@ __Start the default config__
 
 __Create a topic__
 ```bash
-/opt/kafka/bin/kafka-topics.sh --bootstrap-server localhost:9092 --create --topic hello-world --partitions 1 --replication-factor 1
+/opt/kafka/bin/kafka-topics.sh --bootstrap-server kafka1:9092 --create --topic hello-world3 --partitions 1 --replication-factor 1
 ```
 
 __Interactive shell for creating messages for an existing topic__
 
 ```bash
-/opt/kafka/bin/kafka-console-producer.sh --bootstrap-server localhost:9092 --topic hello-world
+/opt/kafka/bin/kafka-console-producer.sh --bootstrap-server kafka1:9092 --topic hello-world3
 ```
 
 __Listen for a topic's messages__
 - Listen to messages for topic
 ```bash
-/opt/kafka/bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic hello-world --from-beginning
+/opt/kafka/bin/kafka-console-consumer.sh --bootstrap-server kafka1:9092 --topic hello-world3 --from-beginning
 ```
 
 
 __Delete a topic__
 ```bash
-/opt/kafka/bin/kafka-topics.sh --bootstrap-server=localhost:9092 --delete --if-exists --topic hello-world
+/opt/kafka/bin/kafka-topics.sh --bootstrap-server=kafka1:9092 --delete --if-exists --topic hello-world
 ```
 
 __List topics__
 ```bash
-/opt/kafka/bin/kafka-topics.sh --bootstrap-server=localhost:9092 --list
+/opt/kafka/bin/kafka-topics.sh --bootstrap-server=kafka1:9092 --list
 ```

@@ -1,3 +1,4 @@
+
 # Create user "tars"
 sudo useradd -r -s /sbin/nologin tars
 sudo usermod -aG sudo tars
@@ -25,17 +26,16 @@ for dir in "${directories[@]}"; do
     sudo chown -R tars:tars "$dir"
 done
 
-
-# Set the Zookeeper Instance ID
-sudo nano /data/zookeeper/myid
-
 # Install Java and Required packages
 sudo apt-get update && sudo apt-get -y install wget ca-certificates zip net-tools vim nano tar netcat openjdk-8-jdk
 # Verifying versions
 java -version
 
+# Add file limits configs - allow to open 100,000 file descriptors
+echo "* hard nofile 100000
+* soft nofile 100000" | sudo tee --append /etc/security/limits.conf
+
 # update memory swap
-# to leverage as little SSD as possible
 sudo sysctl vm.swappiness=1
 echo 'vm.swappiness=1' | sudo tee --append /etc/sysctl.conf
 
@@ -51,16 +51,13 @@ tar -xvzf kafka.tgz
 mv kafka_*/* /opt/kafka/
 rm kafka.tgz
 
-ls /opt/kafka/bin | grep "zookeeper"
-
+ls /opt/kafka/bin
 
 
 # verify:
-cat /opt/kafka/config/zookeeper.properties
+cat /opt/kafka/config/server.properties
 
+# copy
+cp /opt/kafka/config/server.properties /data/my-config/
 # Run
-# /opt/kafka/bin/zookeeper-server-start.sh /opt/kafka/config/zookeeper.properties
-# /opt/kafka/bin/zookeeper-server-start.sh /data/my-config/zookeeper.properties
-
-# In new terminal, enter the shell
-# /opt/kafka/bin/zookeeper-shell.sh localhost:2181
+# /opt/kafka/bin/kafka-server-start.sh /data/my-config/server.properties
