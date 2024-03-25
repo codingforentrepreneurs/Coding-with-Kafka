@@ -5,7 +5,7 @@ After=network.target
 [Service]
 Type=simple
 User=tars
-ExecStart=/opt/kafka/bin/kafka-server-start.sh  /data/my-config/server.properties
+ExecStart=/opt/kafka/bin/kafka-server-start.sh /data/my-config/server.properties
 WorkingDirectory=/opt/kafka
 Restart=on-failure
 RestartSec=10s
