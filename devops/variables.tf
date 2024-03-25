@@ -13,7 +13,7 @@ variable "zookeeper_server_count" {
 }
 
 variable "kafka_server_count" {
-    default = 3
+    default = 5
     type = number
 }
 
