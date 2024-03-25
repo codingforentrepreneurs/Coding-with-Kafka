@@ -91,3 +91,11 @@ resource "local_file" "ansible_inventory" {
   })
   filename = "${local.project_root_dir}/inventory.ini"
 }
+
+resource "local_file" "cluster_brokers_env_file" {
+  content = templatefile("${local.templates_dir}/cluster.env.tftpl", {
+    kafka_instances=local.kafka_instances,
+    zookeeper_instances=local.zookeeper_instances
+  })
+  filename = "${local.project_root_dir}/cluster.env"
+}

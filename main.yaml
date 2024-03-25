@@ -1,0 +1,5 @@
+- name: Configure Zookeeper
+  import_playbook: playbooks/zookeeper.yaml
+
+- name: Configure Kafka
+  import_playbook: playbooks/kafka.yaml

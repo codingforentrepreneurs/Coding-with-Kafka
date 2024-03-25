@@ -1,0 +1,23 @@
+# custom zookeeper settings
+# all found at https://zookeeper.apache.org/doc/r3.3.3/zookeeperAdmin.html#sc_configuration
+
+# the directory where the snapshot is stored.
+dataDir=/data/zookeeper
+# the port at which the clients will connect
+clientPort=2181
+# disable the per-ip limit on the number of connections since this is a non-production config
+maxClientCnxns=0
+
+# tickTime the basic time unit in milliseconds, regulating heartbeats and timeouts, with a minimum session timeout of two ticks.
+tickTime=2000
+# the number of ticks that the initial synchronization phase can take
+initLimit=10
+# the number of ticks that can pass between sending a request and getting an acknowledgement
+syncLimit=5
+
+4lw.commands.whitelist=stat, ruok, conf, isro, dump
+
+# the servers in the ensemble
+{% for host in groups['zookeeper_servers'] %}
+server.{{ loop.index }}=zookeeper{{ hostvars[host]['node_id'] }}:2888:3888
+{% endfor %}

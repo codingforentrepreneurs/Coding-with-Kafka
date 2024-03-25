@@ -1,3 +1,4 @@
+#!/bin/bash
 
 # Create user "tars"
 sudo useradd -r -s /sbin/nologin tars

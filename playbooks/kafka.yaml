@@ -1,0 +1,84 @@
+---
+- name: Prepare Cluster for Kafka
+  hosts: kafka_servers
+  become: true  # Required to edit /etc/hosts
+  vars: 
+    my_config_dir: '/data/my-config'
+    my_kafka_props: '{{ my_config_dir }}/kafka.properties'
+  tasks:
+    - name: Set hostname
+      ansible.builtin.hostname:
+        name: "{{ inventory_hostname }}"
+
+    - name: Replace /etc/hosts with Terraform-managed host-config.txt
+      ansible.builtin.copy:
+        src: "{{ inventory_dir }}/host-config.txt"
+        dest: /etc/hosts
+        backup: yes
+
+    - name: Ensure A few Directories Exist My Config Dir
+      ansible.builtin.file:
+        path: '{{ my_config_dir }}'
+        state: directory
+        mode: '0755'
+
+    - name: Copy Kafka Properties
+      ansible.builtin.template:
+        src: ./templates/kafka.properties.j2
+        dest: '{{ my_kafka_props }}'
+        backup: yes
+      register: kafka_properties
+
+    - name: Deploy Kafka systemd service file
+      ansible.builtin.template:
+        src: ./templates/kafka.systemd.j2
+        dest: /etc/systemd/system/kafka.service
+        owner: root
+        group: root
+        mode: '0644'
+      register: kafka_service
+      notify: Reload systemd
+    
+    - name: Flush handlers to ensure systemd is reloaded immediately
+      meta: flush_handlers
+    
+    - name: Copy Kafka Bootstrap Script
+      ansible.builtin.copy:
+        src: '{{ inventory_dir }}/config/install-kafka.sh'
+        dest: /tmp/bootstrap-kafka.sh
+        mode: '0755'
+
+    - name: Run Bootstrap Script
+      ansible.builtin.shell: /tmp/bootstrap-kafka.sh
+
+    - name: Check Kafka status
+      ansible.builtin.systemd:
+        name: kafka
+        state: started
+      register: kafka_service
+      # failed_when: zookeeper_service.status.ActiveState != 'active'
+      ignore_errors: true
+
+    - name: Start kafka if not running
+      ansible.builtin.systemd:
+        name: kafka
+        state: started
+        enabled: yes
+      when: kafka_service.status.ActiveState != 'active'
+
+    - name: Restart kafka if properties changed
+      ansible.builtin.systemd:
+        name: kafka
+        state: restarted
+      when: kafka_properties.changed and kafka_service.status.ActiveState == 'active'
+
+    - name: Restart kafka if systemd conf changed
+      ansible.builtin.systemd:
+        name: kafka
+        state: restarted
+      when: kafka_service.changed
+
+  handlers:
+    - name: Reload systemd
+      ansible.builtin.systemd:
+        daemon_reload: yes

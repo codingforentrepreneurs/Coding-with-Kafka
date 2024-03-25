@@ -1,0 +1,87 @@
+---
+- name: Prepare Cluster for Zookeeper
+  hosts: zookeeper_servers
+  become: true  # Required to edit /etc/hosts
+  vars: 
+    my_config_dir: '/data/my-config'
+    my_zookeeper_props: '{{ my_config_dir }}/zookeeper.properties'
+  tasks:
+    - name: Set hostname
+      ansible.builtin.hostname:
+        name: "{{ inventory_hostname }}"
+
+    - name: Replace /etc/hosts with Terraform-managed host-config.txt
+      ansible.builtin.copy:
+        src: "{{ inventory_dir }}/host-config.txt"
+        dest: /etc/hosts
+        backup: yes
+
+    - name: Ensure A few Directories Exist My Config Dir
+      ansible.builtin.file:
+        path: '{{ my_config_dir }}'
+        state: directory
+        mode: '0755'
+
+    - name: Copy Zookeeper Properties
+      ansible.builtin.template:
+        src: ./templates/zookeeper.properties.j2
+        dest: '{{ my_zookeeper_props }}'
+        backup: yes
+      register: zookeeper_properties
+
+    - name: Deploy Zookeeper systemd service file
+      ansible.builtin.template:
+        src: ./templates/zookeeper.systemd.j2
+        dest: /etc/systemd/system/zookeeper.service
+        owner: root
+        group: root
+        mode: '0644'
+      notify: Reload systemd
+    
+    - name: Flush handlers to ensure systemd is reloaded immediately
+      meta: flush_handlers
+    
+    - name: Copy Zookeeper Bootstrap Script
+      ansible.builtin.copy:
+        src: '{{ inventory_dir }}/config/install-zookeeper.sh'
+        dest: /tmp/bootstrap-zookeeper.sh
+        mode: '0755'
+
+    - name: Run Bootstrap Script
+      ansible.builtin.shell: /tmp/bootstrap-zookeeper.sh
+
+    - name: Check Zookeeper status
+      ansible.builtin.systemd:
+        name: zookeeper
+        state: started
+      register: zookeeper_service
+      # failed_when: zookeeper_service.status.ActiveState != 'active'
+      ignore_errors: true
+
+    - name: Start Zookeeper if not running
+      ansible.builtin.systemd:
+        name: zookeeper
+        state: started
+        enabled: yes
+      when: zookeeper_service.status.ActiveState != 'active'
+
+    - name: Restart Zookeeper if properties changed
+      ansible.builtin.systemd:
+        name: zookeeper
+        state: restarted
+      when: zookeeper_properties.changed and zookeeper_service.status.ActiveState == 'active'
+
+    - name: Check if Zookeeper is responding to 'ruok'
+      ansible.builtin.shell: |
+        echo "ruok" | nc localhost 2181 ; echo
+      register: zookeeper_ruok
+      ignore_errors: true
+
+    - name: Display Zookeeper 'ruok' response
+      ansible.builtin.debug:
+        msg: "{{ zookeeper_ruok.stdout_lines }}"
+
+  handlers:
+    - name: Reload systemd
+      ansible.builtin.systemd:
+        daemon_reload: yes

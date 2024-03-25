@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # Create user "tars"
 sudo useradd -r -s /sbin/nologin tars
 sudo usermod -aG sudo tars
@@ -27,7 +29,16 @@ done
 
 
 # Set the Zookeeper Instance ID
-sudo nano /data/zookeeper/myid
+# uncomment during manual use
+# sudo nano /data/zookeeper/myid
+
+# Extract the Zookeeper Instance ID from 
+# the hostname
+hostname=$(hostname)
+host_id=$(echo $hostname | grep -o '[0-9]*' | sed 's/^0*//')
+echo "$host_id" | sudo tee /data/zookeeper/myid
+cat /data/zookeeper/myid
+
 
 # Install Java and Required packages
 sudo apt-get update && sudo apt-get -y install wget ca-certificates zip net-tools vim nano tar netcat openjdk-8-jdk
