@@ -147,21 +147,26 @@ __Start the default config__
 /opt/kafka/bin/kafka-server-start.sh /opt/kafka/config/server.properties
 ```
 
+__Start the custom config__
+```bash
+/opt/kafka/bin/kafka-server-start.sh /data/my-config/server.properties
+```
+
 __Create a topic__
 ```bash
-/opt/kafka/bin/kafka-topics.sh --bootstrap-server kafka1:9092 --create --topic hello-world3 --partitions 1 --replication-factor 1
+/opt/kafka/bin/kafka-topics.sh --bootstrap-server kafka1:9092 --create --topic hello-world --partitions 1 --replication-factor 1
 ```
 
 __Interactive shell for creating messages for an existing topic__
 
 ```bash
-/opt/kafka/bin/kafka-console-producer.sh --bootstrap-server kafka1:9092 --topic hello-world3
+/opt/kafka/bin/kafka-console-producer.sh --bootstrap-server kafka1:9092 --topic hello-world
 ```
 
 __Listen for a topic's messages__
 - Listen to messages for topic
 ```bash
-/opt/kafka/bin/kafka-console-consumer.sh --bootstrap-server kafka1:9092 --topic hello-world3 --from-beginning
+/opt/kafka/bin/kafka-console-consumer.sh --bootstrap-server kafka1:9092 --topic hello-world --from-beginning
 ```
 
 
