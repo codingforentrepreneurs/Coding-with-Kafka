@@ -10,7 +10,7 @@ import random
 KAFKA_BROKER_URL="172.234.228.67:19092"
 bootstrap_servers=[KAFKA_BROKER_URL]
 
-KAFKA_TOPIC="hello-world"
+KAFKA_TOPIC="my-new-topic"
 
 producer = KafkaProducer(bootstrap_servers=bootstrap_servers)
 
