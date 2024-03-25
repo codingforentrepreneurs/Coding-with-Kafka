@@ -2,5 +2,5 @@
 ${instance.private_ip} ${instance.hostname}
 %{ endfor ~}
 %{ for index, instance in kafka_instances ~}
-${instance.ip_address} ${instance.hostname}
+${instance.private_ip} ${instance.hostname}
 %{ endfor ~}
