@@ -179,3 +179,55 @@ __List topics__
 ```bash
 /opt/kafka/bin/kafka-topics.sh --bootstrap-server=kafka1:9092 --list
 ```
+
+
+## Systemd Commands
+
+__Create a new service__
+```bash
+nano /etc/systemd/system/my-service.service
+```
+
+Use the format
+```
+[Unit]
+Description=My service server
+After=network.target
+
+[Service]
+Type=simple
+User=tars
+ExecStart=/path/to/executable /path/to/config
+WorkingDirectory=/path/to/working/dir
+Restart=on-failure
+RestartSec=10s
+StandardOutput=file:/var/log/my-service/my-service.out
+StandardError=file:/var/log/my-service/my-service.err
+LimitNOFILE=800000
+Environment=PATH=/usr/bin:/bin:/usr/local/bin
+
+[Install]
+WantedBy=multi-user.target
+```
+
+
+
+__Reload the daemon__
+```bash
+sudo systemctl daemon-reload
+```
+
+__Start the service__
+```bash
+sudo systemctl start zookeeper
+```
+In place of `start`:
+- Use `stop` to stop the service
+- Use `restart` to restart the service
+- Use `status` to get the systemd status of the service
+
+
+__Journal logs about the service__
+```bash
+journalctl -u zookeeper.service
+```
