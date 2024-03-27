@@ -26,7 +26,7 @@ bootstrap_servers = [KAFKA_BROKER_1, KAFKA_BROKER_2, KAFKA_BROKER_3, KAFKA_BROKE
 KAFKA_TOPIC="some_topic"
 
 consumer = KafkaConsumer(
-    KAFKA_TOPIC, "order_update",
+    KAFKA_TOPIC, "order_update", 'webapp_page_view',
     bootstrap_servers=bootstrap_servers,
     # auto_offset_reset='smallest' # from_beginning: true
 )
