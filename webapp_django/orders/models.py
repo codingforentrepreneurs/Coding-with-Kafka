@@ -22,6 +22,7 @@ class Order(models.Model):
         choices=OrderStatus.choices,
         default=OrderStatus.PENDING
     )
+    is_shipped = models.BooleanField(default=False)
     timestamp = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
@@ -31,6 +32,8 @@ class Order(models.Model):
     def save(self, *args, **kwargs):
         if not self.product_name:
             self.product_name = orders_utils.generate_product_name()
+        if self.is_shipped:
+            self.status = Order.OrderStatus.SHIPPED
         super().save(*args, **kwargs)
 
     def ready_to_ship(self):
@@ -55,15 +58,15 @@ class Order(models.Model):
     
 
 def order_did_update(sender, instance, *args, **kwargs):
-    if instance.ready_to_ship():
+    if instance.ready_to_ship() and not instance.is_shipped: 
         instance_data = instance.serialize()
         topic_status = Order.OrderStatus.PROCESSED
         topic_data = {
             "type": f"orders/{topic_status}",
             "object": instance_data,
         }
-        print(topic_data)
-        # result = mykafka.send_topic_data(topic_data, topic=f'order_update')
+        # print(topic_data)
+        result = mykafka.send_topic_data(topic_data, topic=f'order_update')
         # print(result)
 
 

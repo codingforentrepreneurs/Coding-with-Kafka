@@ -52,6 +52,19 @@ async def read_root(order_id:str=None):
     return {"Hello": "World", "BASE_DIR": BASE_DIR}
 
 
+@app.get("/order/{order_id}")
+async def read_order(order_id:str=None):
+    print(order_id)
+    event_data = {"type": "orders/shipped", "order_id": order_id}
+    data = json.dumps(event_data).encode("utf-8")
+    producer = workers.get("producer")
+    if producer is not None:
+        topic = "order_update"
+        await producer.send_and_wait(topic, data)
+    return {"Hello": "World", "BASE_DIR": BASE_DIR}
+
+
+
 @app.get("/items/{item_id}")
 def read_item(item_id: int, q: Union[str, None] = None):
     return {"item_id": item_id, "q": q}

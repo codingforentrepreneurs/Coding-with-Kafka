@@ -3,7 +3,7 @@ from orders.models import Order
 import json
 import mykafka 
 
-
+# python manage.py listen
 class Command(BaseCommand):
     help = 'Process orders'
 
@@ -25,12 +25,12 @@ class Command(BaseCommand):
         except json.decoder.JSONDecodeError:
             data = None
             print("invalid json")
-        # print(data, type(data), type(value_str))
+        # print(data, 'django_listener')
         data_type = data.get('type')
         order_shipped_type = f"orders/{Order.OrderStatus.SHIPPED}"
         if data_type == order_shipped_type:
             print(data)
-            # order_id = data.get('order_id')
-            # qs = Order.objects.filter(id__iexact=order_id).exclude(status=Order.OrderStatus.SHIPPED)
-            # if qs.exists():
-            #     qs.update(status=Order.OrderStatus.SHIPPED)
+            order_id = data.get('order_id')
+            qs = Order.objects.filter(id__iexact=order_id).exclude(status=Order.OrderStatus.SHIPPED)
+            if qs.exists():
+                qs.update(status=Order.OrderStatus.SHIPPED, is_shipped=True)
