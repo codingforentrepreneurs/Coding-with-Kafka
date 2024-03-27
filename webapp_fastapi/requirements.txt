@@ -3,3 +3,4 @@ fastapi
 # main.py has app = FastAPI() -> main:app
 uvicorn 
 python-decouple
+aiokafka
