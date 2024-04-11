@@ -1,6 +1,0 @@
-fastapi
-# uvicorn main:app --reload
-# main.py has app = FastAPI() -> main:app
-uvicorn 
-python-decouple
-aiokafka

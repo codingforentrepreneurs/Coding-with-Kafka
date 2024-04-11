@@ -1,3 +1,0 @@
-Django
-python-decouple
-kafka-python
