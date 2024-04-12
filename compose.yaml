@@ -1,18 +1,42 @@
 services:
-  zookeeper: # hostname -> zookeeper:2181
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_SERVER_ID: 1
+      ZOOKEEPER_SERVERS: zookeeper:2181:2888;zookeeper2:2182:2889;zookeeper3:2183:2890
+      KAFKA_OPTS: "-Dzookeeper.4lw.commands.whitelist=*"
+    ports:
+      - "2181:2181"
+      - "2888:2888"
+  zookeeper2: # hostname -> zookeeper2:2181
     image: confluentinc/cp-zookeeper:latest
     environment:
       # clientPort
       ZOOKEEPER_CLIENT_PORT: 2181 # default
       # server id
-      ZOOKEEPER_SERVER_ID: 1 # max 3
+      ZOOKEEPER_SERVER_ID: 2 # max 3
       # zookeepers servers
-      ZOOKEEPER_SERVERS: zookeeper:2181:2888
+      ZOOKEEPER_SERVERS: zookeeper:2181:2888;zookeeper2:2182:2889;zookeeper3:2183:2890
       # ruok stat
       KAFKA_OPTS: "-Dzookeeper.4lw.commands.whitelist=*"
     ports:
-      - "2181:2181"
-      - "2888:2888"
+      - "2182:2181"
+      - "2889:2888"
+  zookeeper3: # hostname -> zookeeper3:2181
+    image: confluentinc/cp-zookeeper:latest
+    environment:
+      # clientPort
+      ZOOKEEPER_CLIENT_PORT: 2181 # default
+      # server id
+      ZOOKEEPER_SERVER_ID: 3 # max 3
+      # zookeepers servers
+      ZOOKEEPER_SERVERS: zookeeper:2181:2888;zookeeper2:2182:2889;zookeeper3:2183:2890
+      # ruok stat
+      KAFKA_OPTS: "-Dzookeeper.4lw.commands.whitelist=*"
+    ports:
+      - "2183:2181"
+      - "2890:2888"
   vm:
     build:
       context: ./vm
