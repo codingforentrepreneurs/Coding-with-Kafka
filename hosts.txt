@@ -1,0 +1,6 @@
+10.0.0.2    zookeeper1
+10.0.0.3    zookeeper2
+10.0.0.4    zookeeper3
+10.0.0.5    kafka1
+10.0.0.6    kafka2
+10.0.0.7    kafka3
