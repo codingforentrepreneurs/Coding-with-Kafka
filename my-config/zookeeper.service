@@ -1,0 +1,18 @@
+[Unit]
+Description=Zookeeper server
+After=network.target
+
+[Service]
+Type=simple
+User=tars
+ExecStart=/opt/kafka/bin/zookeeper-server-start.sh /data/my-config/zookeeper.properties
+WorkingDirectory=/opt/kafka
+Restart=on-failure
+RestartSec=10s
+StandardOutput=file:/var/log/zookeeper/zookeeper.out
+StandardError=file:/var/log/zookeeper/zookeeper.err
+LimitNOFILE=800000
+Environment=PATH=/usr/bin:/bin:/usr/local/bin
+
+[Install]
+WantedBy=multi-user.target
